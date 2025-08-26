@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leandro Andrade de Oliveira - Análise de Dados e BI</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* ==================================== */
+        /* VARIÁVEIS DE CORES E TEMA            */
+        /* ==================================== */
+        :root {
+            /* TEMA CLARO (PADRÃO) */
+            --fundo-principal: #f3f4f6; /* Cinza bem claro */
+            --fundo-secundario: #ffffff;
+            --texto-principal: #111827; /* Preto suave */
+            --texto-secundario: #4b5563; /* Cinza escuro */
+            --acento-principal: #2563eb; /* Azul */
+            --acento-secundario: #1d4ed8; /* Azul mais escuro */
+            --acento-destaque: #e3b341;
+            --borda: #d1d5db;
+            --sombra-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transicao: all 0.3s ease;
+        }
+        
+        body.dark-theme {
+            /* TEMA ESCURO */
+            --fundo-principal: #0d1117;
+            --fundo-secundario: #161b22;
+            --texto-principal: #c9d1d9;
+            --texto-secundario: #8b949e;
+            --acento-principal: #58a6ff;
+            --acento-secundario: #1f6feb;
+            --borda: #30363d;
+            --sombra-card: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        /* ==================================== */
+        /* ESTILOS GERAIS                       */
+        /* ==================================== */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--fundo-principal);
+            color: var(--texto-principal);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            color: var(--texto-principal);
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--acento-principal);
+            border-radius: 5px;
+        }
+
+        p, ul {
+            color: var(--texto-secundario);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        strong {
+            color: var(--acento-principal);
+            font-weight: 500;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--acento-secundario);
+            color: #ffffff;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transicao);
+            border: 1px solid var(--acento-secundario);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background: var(--acento-principal);
+            border-color: var(--acento-principal);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--acento-principal);
+            border: 1px solid var(--acento-principal);
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transicao);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--acento-principal);
+            color: var(--fundo-secundario);
+        }
+        
+        body.dark-theme .btn-secondary:hover {
+            color: #ffffff;
+        }
+
+        /* Seções */
+        section {
+            padding: 5rem 0;
+        }
+        
+        .section-card {
+            background-color: var(--fundo-secundario);
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            padding: 3rem;
+            border: 1px solid var(--borda);
+            transition: var(--transicao);
+            box-shadow: var(--sombra-card);
+        }
+
+        /* Seção Hero */
+        .hero {
+            background-color: var(--fundo-secundario);
+            padding: 5rem 0;
+            display: flex;
+            align-items: center;
+            min-height: auto;
+            border-bottom: 1px solid var(--borda);
+        }
+        
+        .hero-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.5rem;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            font-weight: 900;
+            margin: 0 0 1rem 0;
+            line-height: 1.2;
+            color: var(--texto-principal);
+        }
+        
+        .hero h1 span {
+            color: var(--acento-principal);
+        }
+
+        .hero h3.hero-name {
+            font-size: 1.5rem;
+            margin: 0.5rem 0;
+            font-weight: 500;
+            color: var(--texto-secundario);
+        }
+        
+        .hero p.hero-subtitle {
+            font-size: 1.2rem;
+            margin: 0 0 2rem 0;
+            font-weight: 400;
+            color: var(--texto-secundario);
+        }
+        
+        .profile-photo {
+            width: 280px; 
+            height: 280px;
+            border-radius: 50%;
+            border: 7px solid var(--acento-secundario);
+            object-fit: cover;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            transition: var(--transicao);
+        }
+        
+        .profile-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(88, 166, 255, 0.4);
+            border-color: var(--acento-principal);
+        }
+        
+        body.dark-theme .profile-photo {
+            box-shadow: 0 0 30px rgba(31, 111, 235, 0.4);
+        }
+
+        .tech-icons {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tech-icons i {
+            font-size: 2.5rem;
+            color: var(--texto-secundario);
+            transition: var(--transicao);
+        }
+        
+        .tech-icons i:hover {
+            color: var(--acento-principal);
+            transform: scale(1.2);
+        }
+        
+        /* Seção Projetos */
+        .project-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background-color: var(--fundo-secundario);
+            padding: 2.5rem;
+            border-radius: 10px;
+            transition: var(--transicao);
+            border: 1px solid var(--borda);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-card--highlight {
+            border-color: var(--acento-destaque);
+            box-shadow: 0 0 20px rgba(227, 179, 65, 0.2);
+        }
+        .project-card--highlight h3 {
+            color: var(--acento-destaque);
+        }
+
+        .project-card h3 {
+            margin-top: 0;
+            color: var(--acento-principal);
+            font-size: 1.5rem;
+            flex-grow: 0;
+        }
+        
+        .project-card > p {
+             flex-grow: 1;
+        }
+        
+        .project-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.7s ease-in-out;
+            border-left: 3px solid var(--acento-secundario);
+            padding-left: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .project-details.expanded {
+            max-height: 1000px;
+        }
+        
+        .project-card .links {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            flex-grow: 0;
+        }
+        
+        .project-card .links a, .project-card .links button {
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .link-github {
+            color: var(--texto-secundario);
+            transition: color 0.3s;
+        }
+        .link-github:hover {
+            color: var(--acento-principal);
+        }
+        
+        .all-repos-link {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        /* Seção Habilidades */
+        .skills-chart-container {
+            position: relative;
+            height: 550px;
+            width: 100%;
+        }
+        
+        /* Seção Certificados (Slider) */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        .slider-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .slide img {
+            width: 100%;
+            display: block;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--borda);
+        }
+        .slide-caption {
+            padding: 0 1rem;
+        }
+        .slide-title {
+            color: var(--acento-principal);
+            font-size: 1.2rem;
+            margin: 0 0 0.5rem 0;
+        }
+        .slide-description {
+            color: var(--texto-secundario);
+            font-size: 1rem;
+        }
+        .slider-button {
+            position: absolute;
+            top: 40%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 20px;
+            z-index: 100;
+            transition: background-color 0.3s;
+        }
+        .slider-button:hover {
+            background-color: var(--acento-principal);
+        }
+        .prev-button {
+            left: 10px;
+        }
+        .next-button {
+            right: 10px;
+        }
+        
+        /* Seção Formação */
+        .education-entry {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        .education-icon {
+            font-size: 4rem;
+            color: var(--acento-principal);
+        }
+        .education-details h3 {
+            margin: 0 0 0.5rem 0;
+            color: var(--texto-principal);
+        }
+        .education-details p {
+            margin: 0;
+        }
+        
+        /* Seção Experiência Adicional */
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .experience-item h4 {
+            color: var(--acento-principal);
+            margin-bottom: 0.5rem;
+        }
+        .experience-item ul {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+
+        /* Estilos do Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.85);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            position: relative;
+            background-color: var(--fundo-secundario);
+            margin: auto;
+            padding: 20px;
+            border: 1px solid var(--borda);
+            width: 90%;
+            max-width: 900px;
+            border-radius: 10px;
+        }
+        
+        #email-modal .modal-content {
+            max-width: 500px;
+            text-align: center;
+        }
+        #email-modal p {
+            word-break: break-all;
+            background-color: var(--fundo-principal);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--borda);
+            color: var(--texto-principal);
+        }
+
+        .modal-content video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        /* Botão de Tema */
+        #theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--fundo-secundario);
+            color: var(--texto-secundario);
+            border: 1px solid var(--borda);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1001;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transicao);
+        }
+        #theme-toggle:hover {
+            color: var(--acento-principal);
+            border-color: var(--acento-principal);
+        }
+        .fa-sun { display: none; }
+        body.dark-theme .fa-sun { display: block; }
+        body.dark-theme .fa-moon { display: none; }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            background-color: var(--fundo-secundario);
+            border-top: 1px solid var(--borda);
+            margin-top: 2rem;
+        }
+        
+        /* ==================================== */
+        /* MEDIA QUERIES PARA RESPONSIVIDADE    */
+        /* ==================================== */
+        @media (max-width: 768px) {
+            .container { padding: 0 1.5rem; }
+            h2 { font-size: 2rem; }
+            .hero { padding: 4rem 0; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero h3.hero-name { font-size: 1.5rem; }
+            .hero p.hero-subtitle { font-size: 1.2rem; }
+            .profile-photo { width: 220px; height: 220px; margin-top: 0; }
+            #sobre { padding-top: 5rem; }
+            .section-card { padding: 2rem; }
+            .education-entry { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="theme-toggle" title="Alternar tema">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- 1. HOME / APRESENTAÇÃO -->
+    <header class="hero" id="home">
+        <div class="container hero-container">
+            <img src="foto.png" alt="Foto de perfil de Leandro Andrade de Oliveira" class="profile-photo">
+            <div class="hero-content">
+                <h3 class="hero-name">Leandro Andrade de Oliveira</h3>
+                <h1>Analista de Dados & <span>Business Intelligence</span></h1>
+                <p class="hero-subtitle">Desenvolvedor em formação em IA e Data Science, com experiência em projetos práticos de Python, ETL, Power BI e aplicações web. Busco oportunidade como desenvolvedor júnior/estagiário para aplicar conhecimento técnico em soluções reais.</p>
+                <div class="tech-icons">
+                    <i class="fab fa-python" title="Python"></i>
+                    <i class="fas fa-database" title="SQL"></i>
+                    <i class="fas fa-chart-bar" title="Power BI"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. SOBRE MIM -->
+    <section id="sobre" class="container">
+        <div class="section-card">
+            <h2>Sobre Mim</h2>
+            <p>Com uma sólida base de 10 anos em Design Gráfico, desenvolvi um olhar crítico para detalhes e uma paixão por resolver problemas de forma criativa. Essa jornada me levou a uma transição de carreira natural para a área de tecnologia, onde descobri o poder dos dados.</p>
+            <p>Meu foco principal é a <strong>Análise de Dados</strong> e <strong>Business Intelligence</strong>, utilizando <strong>Python</strong>, <strong>SQL</strong> e <strong>Power BI</strong> para transformar dados brutos em insights acionáveis. Além disso, impulsionado pela minha graduação em Inteligência Artificial, estou aprofundando meus conhecimentos em <strong>Machine Learning</strong>, utilizando <strong>Scikit-Learn</strong> para construir modelos preditivos, e explorando o campo da <strong>Engenharia de Prompt</strong> para interagir com IAs generativas.</p>
+        </div>
+    </section>
+
+    <!-- 3. PROJETOS -->
+    <section id="projetos" class="container">
+        <div class="section-card">
+            <h2>Projetos em Destaque</h2>
+            <div class="project-grid">
+                <!-- Projeto 1 -->
+                <div class="project-card">
+                    <h3>Dashflix - Análise do Catálogo da Netflix</h3>
+                    <p>Processo completo de ETL e visualização de dados do catálogo da Netflix, resultando em um dashboard interativo para explorar insights sobre o conteúdo da plataforma.</p>
+                    
+                    <div class="project-details" id="dashflix-details">
+                        <h4>Visão Geral do Projeto</h4>
+                        <p>O projeto é dividido em duas etapas: um processo de ETL (Extração, Transformação e Carga) para limpeza e preparação dos dados, e a criação de um dashboard em Power BI para visualização.</p>
+                        <h4>Processamento e Limpeza de Dados (ETL)</h4>
+                        <ul>
+                            <li>Os dados brutos são lidos e, utilizando <strong>Python</strong> e <strong>Pandas</strong>, são limpos e duplicatas removidas.</li>
+                            <li>O pipeline de dados é estruturado em camadas (Bronze, Prata e Ouro) e armazenado em um banco <strong>SQLite</strong> (simulando um lakehouse).</li>
+                        </ul>
+                        <h4>Visualização de Dados em Power BI</h4>
+                        <p>O arquivo final limpo é usado como fonte para o dashboard "Dashflix", que permite explorar métricas como contagem de filmes vs. séries, distribuição por país e tendências ao longo dos anos.</p>
+                        <h4>Tecnologias Utilizadas</h4>
+                        <p><strong>Python</strong>, <strong>Pandas</strong>, <strong>SQLAlchemy & SQLite</strong>, <strong>Power BI</strong>, e <strong>Google Colab</strong>.</p>
+                    </div>
+                    
+                    <div class="links">
+                        <button class="btn" id="open-video-modal-dashflix"><i class="fas fa-play-circle"></i> Ver Demo</button>
+                        <a href="https://github.com/leanttro/dashflix-netflix" target="_blank" class="link-github"><i class="fab fa-github"></i> Código Fonte</a>
+                        <button class="btn-secondary btn-saiba-mais" data-target="dashflix-details">Saiba Mais</button>
+                    </div>
+                </div>
+                <!-- Projeto 2 -->
+                <div class="project-card">
+                    <h3>Pipeline VLE - Open University - Student Analysis</h3>
+                    <p>Análise completa sobre o engajamento e desempenho dos alunos no Ambiente Virtual de Aprendizagem (VLE) para prever a probabilidade de aprovação.</p>
+                    
+                    <div class="project-details" id="openuni-details">
+                        <h4>Objetivo do Projeto</h4>
+                        <p>Explorar dados demográficos, analisar a interação dos alunos com a plataforma, identificar fatores que influenciam o sucesso acadêmico e construir um modelo de Machine Learning para prever o resultado final do aluno.</p>
+                        <h4>Principais Insights</h4>
+                        <ul>
+                            <li>Alunos de regiões com mais de 50% de pobreza tiveram mais aprovados que reprovados.</li>
+                            <li>A atividade (cliques) aumenta significativamente perto de avaliações, especialmente entre os aprovados.</li>
+                            <li>A região da Irlanda, com menor índice de pobreza, apresentou a maior taxa de aprovação.</li>
+                        </ul>
+                        <h4>Tecnologias Utilizadas</h4>
+                        <p><strong>Python</strong> (Pandas, NumPy, Matplotlib, Seaborn), <strong>Scikit-learn</strong> para modelagem de Machine Learning (Random Forest), e <strong>SQLAlchemy</strong> para simulação de armazenamento em lakehouse.</p>
+                    </div>
+                    
+                    <div class="links">
+                        <a href="https://colab.research.google.com/drive/1PlLEMSQORYXghT9JbP4IMlL8UX3Ih-Lu?usp=sharing" target="_blank" class="btn">Ver Análise</a>
+                        <a href="https://github.com/leanttro/open-university-student-analysis" target="_blank" class="link-github"><i class="fab fa-github"></i> Código Fonte</a>
+                        <button class="btn-secondary btn-saiba-mais" data-target="openuni-details">Saiba Mais</button>
+                    </div>
+                </div>
+                <!-- Projeto 3 -->
+                <div class="project-card">
+                    <h3>Análise de Custos de Infraestrutura (SICRO 2022-2024)</h3>
+                    <p>Análise exploratória de dados públicos do SICRO, focada na limpeza, tratamento e visualização dos custos de insumos para obras de infraestrutura no Brasil.</p>
+                    
+                    <div class="project-details" id="sicro-details">
+                        <h4>Objetivo do Projeto</h4>
+                        <p>O objetivo principal é extrair, tratar e analisar os dados de custos de composições e insumos do SICRO, fornecendo uma visão clara sobre as variações de preços de materiais e serviços essenciais para a infraestrutura.</p>
+                        <h4>Metodologia e Tecnologias</h4>
+                        <ul>
+                            <li><strong>Coleta e Extração:</strong> Dados brutos em formato .xlsx do portal do DNIT.</li>
+                            <li><strong>Tratamento e Limpeza:</strong> Uso da biblioteca <strong>Pandas</strong> em Python para limpeza, remoção de nulos e padronização.</li>
+                            <li><strong>Análise Exploratória (EDA):</strong> Cálculo de estatísticas descritivas para identificar tendências e outliers.</li>
+                            <li><strong>Visualização de Dados:</strong> Uso de <strong>Matplotlib</strong> e <strong>Seaborn</strong> para criar gráficos ilustrativos.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="links">
+                        <a href="https://colab.research.google.com/drive/1_IcdcP9mLREEp3wOduhzXz2OQHIm8VJ6?usp=sharing" target="_blank" class="btn">Ver Análise</a>
+                        <a href="https://github.com/leanttro/analise_pandas_SICRO_COMPLETO_2022-2024" target="_blank" class="link-github"><i class="fab fa-github"></i> Código Fonte</a>
+                        <button class="btn-secondary btn-saiba-mais" data-target="sicro-details">Saiba Mais</button>
+                    </div>
+                </div>
+                <!-- Projeto 4 - Destaque -->
+                <div class="project-card project-card--highlight">
+                    <h3>📱 Meu Trampo é Empreender</h3>
+                    <p>Calculadora de precificação profissional baseada na metodologia "Meu Trampo é Empreender", desenvolvida com apoio de IA generativa e convertida em APK para Android.</p>
+                    
+                    <div class="project-details" id="trampo-details">
+                        <h4>Funcionalidades</h4>
+                        <ul>
+                            <li><strong>Precificação Inteligente:</strong> Considera todos os custos reais do negócio para garantir lucro sustentável.</li>
+                            <li><strong>Dashboard Financeiro:</strong> Resumo de faturamento, lucro e vendas.</li>
+                            <li><strong>Registro no INPI:</strong> Programa registrado no Instituto Nacional da Propriedade Industrial (Nº 512025003024-0).</li>
+                        </ul>
+                        <h4>Tecnologias Utilizadas</h4>
+                        <p><strong>HTML5, CSS3, JavaScript</strong>, com apoio de <strong>IA Generativa</strong> (ChatGPT, Gemini, Claude) para lógica e código, e convertido para <strong>APK</strong>.</p>
+                    </div>
+                    
+                    <div class="links">
+                        <a href="https://leanttro.github.io/meu_trampo/" target="_blank" class="btn">Testar App</a>
+                        <button class="btn" id="open-video-modal-trampo"><i class="fas fa-play-circle"></i> Ver Demo</button>
+                        <a href="https://github.com/leanttro/meu_trampo.git" target="_blank" class="link-github"><i class="fab fa-github"></i> Código Fonte</a>
+                        <button class="btn-secondary btn-saiba-mais" data-target="trampo-details">Saiba Mais</button>
+                    </div>
+                </div>
+            </div>
+            <div class="all-repos-link">
+                <a href="https://github.com/leanttro" target="_blank" class="btn">Ver todos os repositórios no GitHub</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 4. HABILIDADES -->
+    <section id="habilidades" class="container">
+        <div class="section-card">
+            <h2>Principais Habilidades</h2>
+            <div class="skills-chart-container">
+                <canvas id="skillsChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CERTIFICADOS -->
+    <section id="certificados" class="container">
+        <div class="section-card">
+            <h2>Certificados</h2>
+            <div class="slider-container">
+                <div class="slider-wrapper">
+                    <div class="slide">
+                        <img src="certificado1.png" alt="Certificado Python para Data Science">
+                        <div class="slide-caption">
+                            <h3 class="slide-title">Python para Data Science - SENAI</h3>
+                            <p class="slide-description">Focado na aplicação da linguagem Python e suas principais bibliotecas (Pandas, NumPy, Matplotlib) para análise e visualização de dados.</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="certificado2.png" alt="Certificado Power BI">
+                        <div class="slide-caption">
+                            <h3 class="slide-title">Power BI - SENAI</h3>
+                            <p class="slide-description">Capacitação em Business Intelligence, desde o tratamento de dados no Power Query até a criação de dashboards interativos e relatórios.</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="certificado3.png" alt="Certificado Fundamentos de Python">
+                        <div class="slide-caption">
+                            <h3 class="slide-title">Fundamentos do Python - SENAI</h3>
+                            <p class="slide-description">Curso introdutório sobre a sintaxe, estruturas de dados e lógica de programação com a linguagem Python.</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="certificado4.png" alt="Certificado Python Mundo 1, 2, 3">
+                        <div class="slide-caption">
+                            <h3 class="slide-title">Python Mundo 1, 2, 3 - Curso em Vídeo</h3>
+                            <p class="slide-description">Formação completa com Gustavo Guanabara, cobrindo desde os conceitos básicos até tópicos avançados de Python.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-button prev-button">&#10094;</button>
+                <button class="slider-button next-button">&#10095;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FORMAÇÃO ACADÊMICA -->
+    <section id="formacao" class="container">
+        <div class="section-card">
+            <h2>Formação Acadêmica</h2>
+            <div class="education-entry">
+                <div class="education-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="education-details">
+                    <h3>Tecnólogo em Inteligência Artificial</h3>
+                    <p><strong>Instituição:</strong> Cruzeiro do Sul Virtual</p>
+                    <p><strong>Status:</strong> Cursando o 2º semestre, com previsão de formação para 2026.</p>
+                    <p>Foco em áreas como Machine Learning, Deep Learning, Processamento de Linguagem Natural e Visão Computacional.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. EXPERIÊNCIA E HABILIDADES ADICIONAIS -->
+    <section id="experiencia" class="container">
+        <div class="section-card">
+            <h2>Experiência e Habilidades Adicionais</h2>
+            <div class="experience-grid">
+                <div class="experience-item">
+                    <h4>Experiência Profissional</h4>
+                    <ul>
+                        <li><strong>Designer Gráfico | Arte Rox</strong> (Dez 2024 - Ago 2025)</li>
+                        <li><strong>Analista de Marketing | Corum Comunicação Visual</strong> (Jun 2022 - Mai 2023)</li>
+                        <li><strong>Arte-finalista | Oceano Etiquetas</strong> (Jul 2015 - Dez 2020)</li>
+                    </ul>
+                </div>
+                <div class="experience-item">
+                    <h4>Habilidades de Design e Marketing</h4>
+                    <ul>
+                        <li><strong>Design Gráfico:</strong> Domínio em CorelDRAW e Photoshop para criação de materiais visuais e tratamento de imagens.</li>
+                        <li><strong>Marketing Digital:</strong> Experiência na gestão de campanhas de tráfego pago com Google Ads e Facebook Ads.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. CONTATO -->
+    <section id="contato" class="container">
+        <div class="section-card">
+            <h2 style="margin-bottom: 2rem;">Vamos Conversar?</h2>
+            <p style="text-align:center; max-width: 600px; margin: 0 auto 3rem auto;">Estou em busca de oportunidades para aplicar minhas habilidades em análise de dados e BI. Se você tem um projeto em mente ou uma vaga em aberto, entre em contato!</p>
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <button id="open-email-modal" class="btn"><i class="fas fa-envelope"></i> E-mail</button>
+                <a href="https://api.whatsapp.com/send?phone=5511913324827" target="_blank" class="btn"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a href="https://linkedin.com/in/leanttro" target="_blank" class="btn"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Leandro Andrade de Oliveira. Desenvolvido com paixão por dados.</p>
+    </footer>
+
+    <!-- Modal do Vídeo Dashflix -->
+    <div id="video-modal-dashflix" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <video id="dashflix-video" src="Dashflix.mp4" controls></video>
+        </div>
+    </div>
+
+    <!-- Modal do Vídeo Meu Trampo -->
+    <div id="video-modal-trampo" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <video id="trampo-video" src="trampo_demo.mp4" controls></video>
+        </div>
+    </div>
+    
+    <!-- Modal do E-mail -->
+    <div id="email-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3>Entre em contato</h3>
+            <p id="email-text">leandroandrade020797@gmail.com</p>
+            <button id="copy-email-btn" class="btn">Copiar E-mail</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Interno -->
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Funcionalidade "Saiba Mais"
+        document.querySelectorAll('.btn-saiba-mais').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    targetElement.classList.toggle('expanded');
+                    if (targetElement.classList.contains('expanded')) {
+                        this.textContent = 'Mostrar Menos';
+                    } else {
+                        this.textContent = 'Saiba Mais';
+                    }
+                }
+            });
+        });
+
+        // --- Lógica do Gráfico de Habilidades ---
+        const skillsSection = document.getElementById('habilidades');
+        const skillsCtx = document.getElementById('skillsChart').getContext('2d');
+        let skillsChart;
+
+        const skillsData = {
+            labels: [
+                'Python',
+                'Pandas',
+                'Power BI',
+                'Análise de Dados',
+                'Matplotlib',
+                'Seaborn',
+                'Numpy',
+                'Github',
+                'Power Query',
+                'SQL',
+                'Scikit-learn',
+                'IA Generativa'
+            ],
+            datasets: [{
+                label: 'Nível de Proficiência',
+                data: [10, 9, 9, 9, 9, 9, 8, 8, 8, 6, 6, 6],
+                backgroundColor: 'rgba(31, 111, 235, 0.6)', // Cor base da barra
+                borderColor: 'rgba(88, 166, 255, 1)',
+                borderWidth: 1,
+                borderRadius: 5,
+                borderSkipped: false,
+                hoverBackgroundColor: 'rgba(88, 166, 255, 0.8)' // Cor ao passar o mouse
+            }]
+        };
+
+        const chartOptions = {
+            indexAxis: 'y', // Gráfico de barras horizontal
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 10,
+                    grid: {
+                        color: 'rgba(48, 54, 61, 0.5)'
+                    },
+                    ticks: {
+                        color: 'var(--texto-principal)',
+                        font: {
+                            family: "'Inter', sans-serif"
+                        }
+                    }
+                },
+                y: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: 'var(--texto-principal)',
+                        font: {
+                            family: "'Inter', sans-serif",
+                            size: 14
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ` Nível: ${context.raw}/10`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                onComplete: () => {},
+                delay: (context) => {
+                    let delay = 0;
+                    if (context.type === 'data' && context.mode === 'default') {
+                        delay = context.dataIndex * 100 + context.datasetIndex * 100;
+                    }
+                    return delay;
+                },
+            }
+        };
+        
+        function renderSkillsChart() {
+            if (skillsChart) {
+                skillsChart.destroy();
+            }
+            skillsChart = new Chart(skillsCtx, {
+                type: 'bar',
+                data: skillsData,
+                options: chartOptions
+            });
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    renderSkillsChart();
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(skillsSection);
+
+
+        // --- Lógica dos Modais ---
+        function setupModal(modalId, openBtnId, videoId) {
+            const videoModal = document.getElementById(modalId);
+            const openModalBtn = document.getElementById(openBtnId);
+            const videoPlayer = videoId ? document.getElementById(videoId) : null;
+
+            openModalBtn.addEventListener('click', () => {
+                videoModal.style.display = 'flex';
+                if (videoPlayer) {
+                    videoPlayer.currentTime = 0;
+                    videoPlayer.play();
+                }
+            });
+        }
+        
+        document.querySelectorAll('.close-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const modal = this.closest('.modal');
+                modal.style.display = 'none';
+                const videoPlayer = modal.querySelector('video');
+                if (videoPlayer) {
+                    videoPlayer.pause();
+                }
+            });
+        });
+        
+        window.addEventListener('click', (event) => {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                const videoPlayer = event.target.querySelector('video');
+                if (videoPlayer) {
+                    videoPlayer.pause();
+                }
+            }
+        });
+
+        setupModal('video-modal-dashflix', 'open-video-modal-dashflix', 'dashflix-video');
+        setupModal('video-modal-trampo', 'open-video-modal-trampo', 'trampo-video');
+        setupModal('email-modal', 'open-email-modal', null);
+        
+        // --- Lógica para Copiar E-mail ---
+        const copyEmailBtn = document.getElementById('copy-email-btn');
+        const emailText = document.getElementById('email-text').textContent;
+
+        copyEmailBtn.addEventListener('click', () => {
+            const tempInput = document.createElement('input');
+            document.body.appendChild(tempInput);
+            tempInput.value = emailText;
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            copyEmailBtn.textContent = 'Copiado!';
+            setTimeout(() => {
+                copyEmailBtn.textContent = 'Copiar E-mail';
+            }, 2000);
+        });
+
+
+        // --- Lógica do Slider de Certificados ---
+        const sliderWrapper = document.querySelector('.slider-wrapper');
+        const prevButton = document.querySelector('.prev-button');
+        const nextButton = document.querySelector('.next-button');
+        let currentIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function updateSliderPosition() {
+            sliderWrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+
+        prevButton.addEventListener('click', () => {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : totalSlides - 1;
+            updateSliderPosition();
+        });
+
+        nextButton.addEventListener('click', () => {
+            currentIndex = (currentIndex < totalSlides - 1) ? currentIndex + 1 : 0;
+            updateSliderPosition();
+        });
+        
+        // --- Lógica do Botão de Tema ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-theme');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            
+            if (body.classList.contains('dark-theme')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+            
+            chartOptions.scales.x.grid.color = getComputedStyle(body).getPropertyValue('--borda');
+            chartOptions.scales.x.ticks.color = getComputedStyle(body).getPropertyValue('--texto-principal');
+            chartOptions.scales.y.ticks.color = getComputedStyle(body).getPropertyValue('--texto-principal');
+            renderSkillsChart();
+        });
+
+    </script>
+</body>
+</html>
